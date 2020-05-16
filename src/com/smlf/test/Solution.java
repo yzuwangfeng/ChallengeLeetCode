@@ -146,11 +146,31 @@ public class Solution {
     }
 
 
+    /**
+     * 198 题  打家劫舍
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        if(nums.length == 0) return 0;
+        if(nums.length == 1) return nums[0];
+        int pre = 0, cur = 0, tmp;
+        for(int num : nums) {
+            tmp = cur;
+            cur = Math.max(pre + num, cur);
+            pre = tmp;
+        }
+        return cur;
+    }
+
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
-        List<List<Integer>> lists = solution.combinationSum(new int[]{2,3, 5}, 8);
-        System.out.println(lists.size());
+
+        System.out.println(""+solution.rob(new int[]{ 1, 2, 3, 1 }));
+//        List<List<Integer>> lists = solution.combinationSum(new int[]{2,3, 5}, 8);
+//        System.out.println(lists.size());
         // System.out.println(solution.lengthOfLongestSubstring("au"));
     }
 }
