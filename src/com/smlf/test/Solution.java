@@ -210,6 +210,34 @@ public class Solution {
     }
 
 
+    public int countPrimes(int n) {
+        // 1. 给0 - n之间的数加上标记
+        byte[] nums = new byte[n];
+        for (int i = 0; i < n; i++) {
+            nums[i] = 1;
+        }
+
+        // 2. 对于非质数，进行标记清除
+        for (int i = 2; i < n; i++) {
+            // 如果当前数为质数
+            if (nums[i] == 1) {
+                // 将当前数作为基数，筛掉其倍数的数字
+                for (int j = 2; i * j < n; j++) {
+                    // 标记清除
+                    nums[i * j] = 0;
+                }
+            }
+        }
+
+        //3. 遍历数组，统计质数(元素值==1)
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (nums[i] == 1)
+                count++;
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
