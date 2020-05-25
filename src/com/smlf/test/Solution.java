@@ -238,13 +238,124 @@ public class Solution {
         return count;
     }
 
+    /**
+     * 236题 二叉树的最近公共祖先
+      */
+    public static TreeNode stringToTreeNode(String input) {
+        input = input.trim();
+        input = input.substring(1, input.length() - 1);
+        if (input.length() == 0) {
+            return null;
+        }
+
+        String[] parts = input.split(",");
+        String item = parts[0];
+        TreeNode root = new TreeNode(Integer.parseInt(item));
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+
+        int index = 1;
+        while(!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int leftNumber = Integer.parseInt(item);
+                node.left = new TreeNode(leftNumber);
+                nodeQueue.add(node.left);
+            }
+
+            if (index == parts.length) {
+                break;
+            }
+
+            item = parts[index++];
+            item = item.trim();
+            if (!item.equals("null")) {
+                int rightNumber = Integer.parseInt(item);
+                node.right = new TreeNode(rightNumber);
+                nodeQueue.add(node.right);
+            }
+        }
+        return root;
+    }
+
+    public static String treeNodeToString(TreeNode root) {
+        if (root == null) {
+            return "[]";
+        }
+
+        String output = "";
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        nodeQueue.add(root);
+        while(!nodeQueue.isEmpty()) {
+            TreeNode node = nodeQueue.remove();
+
+            if (node == null) {
+                output += "null, ";
+                continue;
+            }
+
+            output += String.valueOf(node.val) + ", ";
+            nodeQueue.add(node.left);
+            nodeQueue.add(node.right);
+        }
+        return "[" + output.substring(0, output.length() - 2) + "]";
+    }
+
+    private TreeNode ans;
+
+    public Solution() {
+        this.ans = null;
+    }
+
+    private boolean dfs(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null) return false;
+        boolean lson = dfs(root.left, p, q);
+        boolean rson = dfs(root.right, p, q);
+        if ((lson && rson) || ((root.val == p.val || root.val == q.val) && (lson || rson))) {
+            ans = root;
+        }
+        return lson || rson || (root.val == p.val || root.val == q.val);
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        this.dfs(root, p, q);
+        return this.ans;
+    }
+    /**
+     * 236题 二叉树的最近公共祖先结束
+     */
+
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
 
-        int a = 11;int b=12; int c = 11;
+//        int a = 11;int b=12; int c = 11;
+//
+//        System.out.println(a^=(b^c));
 
-        System.out.println(a^=(b^c));
+//
+//     236题 二叉树的最近公共祖先
+//
+        TreeNode root = stringToTreeNode("[3,5,1,6,2,0,8,null,null,7,4]");
+        int pValue = Integer.parseInt("5");
+        TreeNode p = new TreeNode(pValue);
+        int qValue = Integer.parseInt("1");
+        TreeNode q = new TreeNode(qValue);
+
+        TreeNode ret = solution.lowestCommonAncestor(root, p, q);
+
+        String out = treeNodeToString(ret);
+
+        System.out.print(out);
+//      236题 二叉树的最近公共祖先结束
 
 
 //        System.out.println(""+solution.rob(new int[]{ 1, 2, 3, 1 }));
