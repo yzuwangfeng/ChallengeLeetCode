@@ -333,6 +333,43 @@ public class Solution {
      */
 
 
+    /**
+     * 53 题 最大自序和  动态规划算法
+     * @param nums
+     * @return
+     */
+    int maxResult = 0;
+    public int maxSubArray(int[] nums) {
+        if(nums.length==0) {
+            return 0;
+        }
+        if(nums.length==1){
+            return nums[0];
+        }
+        findMax(nums, nums.length-1);
+
+        return maxResult;
+    }
+
+    private int findMax(int[] nums, int i) {
+        if(i==0) {
+            maxResult = nums[i];
+            return nums[i];
+        }
+        int subNum = findMax(nums,i-1);
+        if((nums[i]+subNum)>nums[i]) {
+            if(maxResult<(nums[i]+subNum)){
+                maxResult = nums[i]+subNum;
+            }
+            return nums[i]+subNum;
+        }else{
+            if(maxResult<nums[i]) {
+                maxResult = nums[i];
+            }
+            return nums[i];
+        }
+    }
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
@@ -344,17 +381,17 @@ public class Solution {
 //
 //     236题 二叉树的最近公共祖先
 //
-        TreeNode root = stringToTreeNode("[3,5,1,6,2,0,8,null,null,7,4]");
-        int pValue = Integer.parseInt("5");
-        TreeNode p = new TreeNode(pValue);
-        int qValue = Integer.parseInt("1");
-        TreeNode q = new TreeNode(qValue);
-
-        TreeNode ret = solution.lowestCommonAncestor(root, p, q);
-
-        String out = treeNodeToString(ret);
-
-        System.out.print(out);
+//        TreeNode root = stringToTreeNode("[3,5,1,6,2,0,8,null,null,7,4]");
+//        int pValue = Integer.parseInt("5");
+//        TreeNode p = new TreeNode(pValue);
+//        int qValue = Integer.parseInt("1");
+//        TreeNode q = new TreeNode(qValue);
+//
+//        TreeNode ret = solution.lowestCommonAncestor(root, p, q);
+//
+//        String out = treeNodeToString(ret);
+//
+//        System.out.print(out);
 //      236题 二叉树的最近公共祖先结束
 
 
