@@ -370,6 +370,44 @@ public class Solution {
         }
     }
 
+    /**
+     * 402. 移掉K位数字
+     * @param num
+     * @param k
+     * @return
+     */
+    public String removeKdigits(String num, int k) {
+        if(k==num.length()) {
+            return "0";
+        }
+        LinkedList<Character> characterStack = new LinkedList<>();
+        int removedNum= 0;
+        for (int i =0; i < num.length(); i++) {
+            char current = num.charAt(i);
+            while(!characterStack.isEmpty() &&current<characterStack.getLast() && removedNum<k) {
+                characterStack.removeLast();
+                removedNum++;
+            }
+            characterStack.addLast(current);
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        boolean remove =true;
+        if(characterStack.size()==1) {
+            return characterStack.getFirst().toString();
+        }
+        for(int i = 0; i<(num.length()-k); i++) {
+            char current = characterStack.get(i);
+            if(current=='0' && remove && i!=characterStack.size()-1) {
+                continue;
+            }
+            if(current!='0'||!remove||i == characterStack.size()-1) {
+                remove = false;
+                stringBuilder.append(current);
+            }
+        }
+        return stringBuilder.toString();
+    }
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
@@ -402,5 +440,8 @@ public class Solution {
 //        List<List<Integer>> lists = solution.combinationSum(new int[]{2,3, 5}, 8);
 //        System.out.println(lists.size());
         // System.out.println(solution.lengthOfLongestSubstring("au"));
+
+
+        solution.removeKdigits("1432219", 3);
     }
 }
