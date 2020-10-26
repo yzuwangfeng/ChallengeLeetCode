@@ -408,9 +408,118 @@ public class Solution {
         return stringBuilder.toString();
     }
 
+    public int findLength(int[] A, int[] B) {
+        int n = A.length, m = B.length;
+        int ret = 0;
+        for (int i = 0; i < n; i++) {
+            int len = Math.min(m, n - i);
+            int maxlen = maxLength(A, B, i, 0, len);
+            ret = Math.max(ret, maxlen);
+        }
+        for (int i = 0; i < m; i++) {
+            int len = Math.min(n, m - i);
+            int maxlen = maxLength(A, B, 0, i, len);
+            ret = Math.max(ret, maxlen);
+        }
+        return ret;
+    }
+
+    public int maxLength(int[] A, int[] B, int addA, int addB, int len) {
+        int ret = 0, k = 0;
+        for (int i = 0; i < len; i++) {
+            if (A[addA + i] == B[addB + i]) {
+                k++;
+            } else {
+                k = 0;
+            }
+            ret = Math.max(ret, k);
+        }
+        return ret;
+    }
+
+    public int longestValidParentheses(String s) {
+        int maxans = 0;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                stack.push(i);
+            } else {
+                stack.pop();
+                if (stack.empty()) {
+                    stack.push(i);
+                } else {
+                    maxans = Math.max(maxans, i - stack.peek());
+                }
+            }
+        }
+        return maxans;
+    }
+
+    public String addBinary(String a, String b) {
+
+        List<String> list = new ArrayList<>();
+
+        int cary = 0;
+
+        for(int i = 0;i<a.length()||i<b.length(); i++) {
+            int aV = i<a.length()?(a.charAt(a.length()-1-i)-'0'):0;
+            int bV = i<b.length()?(b.charAt(b.length()-1-i)-'0'):0;
+            int add = aV+bV+cary;
+            int current = add%2;
+            list.add(0, current+"");
+            cary=add/2;
+        }
+        list.add(0, ""+cary);
+        return String.join("",list);
+
+    }
+
+
+    /**
+     * 1365. 有多少小于当前数字的数字
+     * @param nums
+     */
+    public int[] smallerNumbersThanCurrent(int[] nums) {
+        int n = nums.length;
+        int[][] data = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            data[i][0] = nums[i];
+            data[i][1] = i;
+        }
+        Arrays.sort(data, new Comparator<int[]>() {
+            public int compare(int[] data1, int[] data2) {
+                return data1[0] - data2[0];
+            }
+        });
+
+        int[] ret = new int[n];
+        int prev = -1;
+        for (int i = 0; i < n; i++) {
+            if (prev == -1 || data[i][0] != data[i - 1][0]) {
+                prev = i;
+            }
+            ret[data[i][1]] = prev;
+        }
+        return ret;
+    }
+
     public static void main(String[] args) {
 
         Solution solution = new Solution();
+
+
+//        String res = solution.addBinary("11","1");
+//        System.out.println(res);
+
+        // 1365. 有多少小于当前数字的数字
+        int[] a = solution.smallerNumbersThanCurrent(new int[]{8,1,2,2,3});
+
+
+
+
+//        solution.longestValidParentheses(")()()");
+        //solution.findLength(new int[]{1,2,3,2,1}, new int[]{3,2,1,4,7});//[1,2,3,2,1]
 
 //        int a = 11;int b=12; int c = 11;
 //
@@ -442,6 +551,6 @@ public class Solution {
         // System.out.println(solution.lengthOfLongestSubstring("au"));
 
 
-        solution.removeKdigits("1432219", 3);
+//        solution.removeKdigits("1432219", 3);
     }
 }
